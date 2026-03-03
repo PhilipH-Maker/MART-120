@@ -1,0 +1,35 @@
+#buttonID {
+  background-color: rgb(34, 144, 181);
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+
+}
+p {font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.headingClass {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 20px;
+  color: rosybrown;
+}
+.linkClass {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: plum;
+}
+body{
+  background-color: rgb(245, 225, 198);
+}
+h1 {color:darkolivegreen}
+
+.page2Class {background-image: url('1997182.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  z-index: -1;
+}
