@@ -1,0 +1,149 @@
+<html>
+<head>
+    <title>Self Portrait</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+    <script>
+        let pupilX1 = 172;
+        let pupilX2 = 228;
+        let pupilSpeed1, pupilSpeed2;
+
+        let headphonesY = 195; 
+        let headphonesSpeed;
+
+        let highlightX = 172;
+        let highlightY = 187;
+        let highlightSpeedX, highlightSpeedY;
+
+        let titleSize = 28;
+        let titleGrowing = true;
+        const titleMin = 28;
+        const titleMax = 140;
+        const titleStep = 1.5;
+
+        function setup() {
+            createCanvas(500, 600);
+
+           
+            pupilSpeed1 = random(0.5, 1.2);
+            pupilSpeed2 = random(0.5, 1.2);
+
+            headphonesSpeed = random(0.3, 0.8);
+
+            highlightSpeedX = random(0.5, 1);
+            highlightSpeedY = random(0.5, 1);
+        }
+
+        function draw() {
+            background(220);
+
+            
+            noStroke();
+            fill(255, 224, 189);
+            ellipse(200, 200, 160, 210); 
+            ellipse(200, 240, 120, 120); 
+
+            fill(150, 90, 60);
+            rect(130, 110, 140, 35);
+
+           
+            triangle(130, 110, 170, 85, 200, 110);
+            triangle(170, 110, 210, 80, 240, 110);
+            triangle(210, 110, 250, 90, 270, 110);
+            triangle(150, 110, 180, 95, 210, 110);
+            triangle(190, 110, 220, 85, 250, 110);
+
+           
+            headphonesY += headphonesSpeed;
+            if (headphonesY > 210 || headphonesY < 180) headphonesSpeed *= -1;
+
+            noFill();
+            stroke(0);
+            strokeWeight(8);
+           
+            arc(200, headphonesY, 200, 160, PI, TWO_PI);
+
+            
+            noStroke();
+            fill(20);
+            ellipse(120, 200 + (headphonesY - 195), 50, 90);
+            ellipse(280, 200 + (headphonesY - 195), 50, 90);
+
+            
+
+            
+            pupilX1 += pupilSpeed1;
+            pupilX2 += pupilSpeed2;
+            if (pupilX1 > 178 || pupilX1 < 166) pupilSpeed1 *= -1;
+            if (pupilX2 > 234 || pupilX2 < 222) pupilSpeed2 *= -1;
+
+            
+            highlightX += highlightSpeedX;
+            highlightY += highlightSpeedY;
+            if (highlightX > 176 || highlightX < 168) highlightSpeedX *= -1;
+            if (highlightY > 191 || highlightY < 183) highlightSpeedY *= -1;
+
+            
+            noFill();
+            stroke(0);
+            strokeWeight(2);
+            rect(150, 170, 45, 35);
+            rect(205, 170, 45, 35);
+            line(195, 187, 205, 187);
+
+           
+            noStroke();
+            fill(255);
+            ellipse(172, 187, 25, 18);
+            ellipse(228, 187, 25, 18);
+
+            fill(80, 140, 255);
+            ellipse(172, 187, 12, 12);
+            ellipse(228, 187, 12, 12);
+
+            
+            fill(0);
+            ellipse(pupilX1, 187, 6, 6);
+            ellipse(pupilX2, 187, 6, 6);
+
+            
+            fill(255); 
+            ellipse(highlightX, highlightY, 4, 4);
+
+            
+            fill(255, 224, 189);
+            stroke(0);
+            strokeWeight(2);
+            triangle(200, 190, 190, 215, 210, 215);
+
+          
+            stroke(0);
+            strokeWeight(2);
+            line(185, 235, 215, 235);
+
+            
+            stroke(120);
+            strokeWeight(2);
+            for (let i = 0; i < 60; i++) point(random(160, 240), random(230, 275));
+            for (let i = 0; i < 20; i++) point(random(170, 230), random(215, 235));
+
+            
+            if (titleGrowing) {
+                titleSize += titleStep;
+                if (titleSize >= titleMax) titleGrowing = false;
+            } else {
+                titleSize -= titleStep;
+                if (titleSize <= titleMin) titleGrowing = true;
+            }
+            fill(0);
+            noStroke();
+            textSize(titleSize);
+            text("Self Portrait", 110, 50);
+
+           
+            textSize(14);
+            text("Philip", 290, 380);
+        }
+    </script>
+</head>
+<body></body>
+</html>
