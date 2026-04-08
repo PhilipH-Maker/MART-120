@@ -1,0 +1,121 @@
+<head>
+<title>Canvas Game</title>
+<style>
+  canvas { border: 1px solid black; background-color: lightgray; }
+</style>
+</head>
+
+<body>
+<canvas id="myCanvas" width="800" height="500"></canvas>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+var playerX = 50;
+var playerY = 50;
+var playerSize = 20;
+var speed = 5;
+
+var exitX = 730;
+var exitY = 430;
+var exitW = 50;
+var exitH = 50;
+
+var obs1 = { x: 200, y: 100, w: 30, h: 30, dx: 2, dy: 1, color: "red" };
+var obs2 = { x: 400, y: 300, w: 60, h: 20, dx: -2, dy: 2, color: "blue" };
+
+var clickX = null;
+var clickY = null;
+
+var keys = {};
+window.addEventListener("keydown", function(e) { keys[e.key] = true; });
+window.addEventListener("keyup", function(e) { keys[e.key] = false; });
+
+canvas.addEventListener("click", function(e) {
+  var rect = canvas.getBoundingClientRect();
+  clickX = e.clientX - rect.left;
+  clickY = e.clientY - rect.top;
+});
+
+function movePlayer() {
+  if (keys["ArrowUp"] || keys["w"]) playerY -= speed;
+  if (keys["ArrowDown"] || keys["s"]) playerY += speed;
+  if (keys["ArrowLeft"] || keys["a"]) playerX -= speed;
+  if (keys["ArrowRight"] || keys["d"]) playerX += speed;
+
+  if (playerX < 0) playerX = 0;
+  else if (playerX > canvas.width - playerSize) playerX = canvas.width - playerSize;
+
+  if (playerY < 0) playerY = 0;
+  else if (playerY > canvas.height - playerSize) playerY = canvas.height - playerSize;
+}
+
+function moveObstacle(o) {
+  o.x += o.dx;
+  o.y += o.dy;
+
+  if (o.x > canvas.width) o.x = 0;
+  else if (o.x + o.w < 0) o.x = canvas.width;
+
+  if (o.y > canvas.height) o.y = 0;
+  else if (o.y + o.h < 0) o.y = canvas.height;
+}
+
+function drawPlayer() {
+  ctx.fillStyle = "green";
+  ctx.fillRect(playerX, playerY, playerSize, playerSize);
+}
+
+function drawExit() {
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(exitX, exitY, exitW, exitH);
+}
+
+function drawObstacle(o) {
+  ctx.fillStyle = o.color;
+  ctx.fillRect(o.x, o.y, o.w, o.h);
+}
+
+function drawClickObstacle() {
+  if (clickX != null && clickY != null) {
+    ctx.fillStyle = "purple";
+    ctx.fillRect(clickX, clickY, 30, 30);
+  }
+}
+
+function checkWin() {
+  if (playerX > exitX && playerY > exitY) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawPlayer();
+  drawExit();
+  drawObstacle(obs1);
+  drawObstacle(obs2);
+  drawClickObstacle();
+
+  if (checkWin()) {
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText("You Win!", 320, 250);
+  }
+}
+
+function update() {
+  movePlayer();
+  moveObstacle(obs1);
+  moveObstacle(obs2);
+  draw();
+}
+
+setInterval(update, 30);
+</script>
+</body>
+</html>
