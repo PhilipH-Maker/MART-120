@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas Game</title>
+<style>
+  canvas { border: 1px solid black; background-color: lightgray; }
+</style>
+</head>
+
+<body>
+<canvas id="myCanvas" width="800" height="500"></canvas>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+var playerX = 50;
+var playerY = 50;
+var playerSize = 20;
+var speed = 5;
+
+var exitX = 730;
+var exitY = 430;
+var exitW = 50;
+var exitH = 50;
+
+var obs1, obs2;
+
+var clickX = null;
+var clickY = null;
+
+var keys = {};
+window.addEventListener("keydown", function(e) { keys[e.key] = true; });
+window.addEventListener("keyup", function(e) { keys[e.key] = false; });
+
+canvas.addEventListener("click", function(e) {
+  var rect = canvas.getBoundingClientRect();
+  clickX = e.clientX - rect.left;
+  clickY = e.clientY - rect.top;
+});
+
+function createPlayer() {
+  playerX = 50;
+  playerY = 50;
+}
+
+function movePlayer() {
+  if (keys["ArrowUp"] || keys["w"]) playerY -= speed;
+  if (keys["ArrowDown"] || keys["s"]) playerY += speed;
+  if (keys["ArrowLeft"] || keys["a"]) playerX -= speed;
+  if (keys["ArrowRight"] || keys["d"]) playerX += speed;
+
+  if (playerX < 0) playerX = 0;
+  else if (playerX > canvas.width - playerSize) playerX = canvas.width - playerSize;
+
+  if (playerY < 0) playerY = 0;
+  else if (playerY > canvas.height - playerSize) playerY = canvas.height - playerSize;
+}
+
+function drawPlayer() {
+  ctx.fillStyle = "green";
+  ctx.fillRect(playerX, playerY, playerSize, playerSize);
+}
+
+function drawMouseObject() {
+  if (clickX != null && clickY != null) {
+    ctx.fillStyle = "purple";
+    ctx.fillRect(clickX, clickY, 30, 30);
+  }
+}
+
+function createObstacles() {
+  obs1 = { x: 200, y: 100, w: 30, h: 30, dx: 2, dy: 1, color: "red" };
+  obs2 = { x: 400, y: 300, w: 60, h: 20, dx: -2, dy: 2, color: "blue" };
+}
+
+function moveObstacle1() {
+  obs1.x += obs1.dx;
+  obs1.y += obs1.dy;
+
+  if (obs1.x > canvas.width) obs1.x = 0;
+  else if (obs1.x + obs1.w < 0) obs1.x = canvas.width;
+
+  if (obs1.y > canvas.height) obs1.y = 0;
+  else if (obs1.y + obs1.h < 0) obs1.y = canvas.height;
+}
+
+function moveObstacle2() {
+  obs2.x += obs2.dx;
+  obs2.y += obs2.dy;
+
+  if (obs2.x > canvas.width) obs2.x = 0;
+  else if (obs2.x + obs2.w < 0) obs2.x = canvas.width;
+
+  if (obs2.y > canvas.height) obs2.y = 0;
+  else if (obs2.y + obs2.h < 0) obs2.y = canvas.height;
+}
+
+function drawObstacles() {
+  ctx.fillStyle = obs1.color;
+  ctx.fillRect(obs1.x, obs1.y, obs1.w, obs1.h);
+
+  ctx.fillStyle = obs2.color;
+  ctx.fillRect(obs2.x, obs2.y, obs2.w, obs2.h);
+}
+
+function drawBorder() {
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(0, 0, canvas.width, canvas.height);
+}
+
+function drawExit() {
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(exitX, exitY, exitW, exitH);
+}
+
+function drawWinMessage() {
+  if (playerX > exitX && playerY > exitY) {
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText("You Win!", 320, 250);
+  }
+}
+
+function drawBackground() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function draw() {
+  drawBackground();
+  movePlayer();
+  moveObstacle1();
+  moveObstacle2();
+  drawPlayer();
+  drawMouseObject();
+  drawObstacles();
+  drawBorder();
+  drawExit();
+  drawWinMessage();
+}
+
+createPlayer();
+createObstacles();
+
+setInterval(draw, 30);
+</script>
+</body>
+</html>
