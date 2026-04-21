@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas Game</title>
+<style>
+canvas {
+  border: 1px solid black;
+  background-color: lightgray;
+}
+</style>
+</head>
+<body>
+
+<canvas id="myCanvas" width="800" height="500"></canvas>
+
+<script>
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+var playerX = 50;
+var playerY = 50;
+var playerSize = 20;
+var speed = 5;
+
+var exitX = 730;
+var exitY = 430;
+var exitW = 50;
+var exitH = 50;
+
+var obstacleX = [100, 220, 350, 500, 650];
+var obstacleY = [80, 150, 250, 100, 320];
+var obstacleW = [30, 50, 25, 70, 40];
+var obstacleH = [30, 20, 60, 25, 40];
+var obstacleColor = ["red", "blue", "orange", "purple", "brown"];
+var obstacleMoveX = [2, -2, 3, -2, 2];
+var obstacleMoveY = [1, 2, -1, 2, -2];
+
+var mouseX;
+var mouseY;
+var mouseShape = false;
+
+var keys = {};
+
+window.addEventListener("keydown", function(event) {
+  keys[event.key] = true;
+});
+
+window.addEventListener("keyup", function(event) {
+  keys[event.key] = false;
+});
+
+canvas.addEventListener("click", function(event) {
+  var rect = canvas.getBoundingClientRect();
+  mouseX = event.clientX - rect.left;
+  mouseY = event.clientY - rect.top;
+  mouseShape = true;
+});
+
+function movePlayer() {
+  if (keys["ArrowUp"] || keys["w"]) {
+    playerY -= speed;
+  }
+  if (keys["ArrowDown"] || keys["s"]) {
+    playerY += speed;
+  }
+  if (keys["ArrowLeft"] || keys["a"]) {
+    playerX -= speed;
+  }
+  if (keys["ArrowRight"] || keys["d"]) {
+    playerX += speed;
+  }
+
+  if (playerX < 0) {
+    playerX = 0;
+  }
+  if (playerY < 0) {
+    playerY = 0;
+  }
+  if (playerX > canvas.width - playerSize) {
+    playerX = canvas.width - playerSize;
+  }
+  if (playerY > canvas.height - playerSize) {
+    playerY = canvas.height - playerSize;
+  }
+}
+
+function drawPlayer() {
+  ctx.fillStyle = "green";
+  ctx.fillRect(playerX, playerY, playerSize, playerSize);
+}
+
+function moveObstacles() {
+  var i;
+  for (i = 0; i < 5; i++) {
+    obstacleX[i] += obstacleMoveX[i];
+    obstacleY[i] += obstacleMoveY[i];
+
+    if (obstacleX[i] > canvas.width) {
+      obstacleX[i] = 0;
+    }
+    if (obstacleX[i] + obstacleW[i] < 0) {
+      obstacleX[i] = canvas.width;
+    }
+    if (obstacleY[i] > canvas.height) {
+      obstacleY[i] = 0;
+    }
+    if (obstacleY[i] + obstacleH[i] < 0) {
+      obstacleY[i] = canvas.height;
+    }
+  }
+}
+
+function drawObstacles() {
+  var i;
+  for (i = 0; i < 5; i++) {
+    ctx.fillStyle = obstacleColor[i];
+    ctx.fillRect(obstacleX[i], obstacleY[i], obstacleW[i], obstacleH[i]);
+  }
+}
+
+function drawMouseShape() {
+  if (mouseShape == true) {
+    ctx.fillStyle = "black";
+    ctx.fillRect(mouseX, mouseY, 30, 30);
+  }
+}
+
+function drawExit() {
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(exitX, exitY, exitW, exitH);
+}
+
+function drawWinMessage() {
+  if (playerX > exitX - 20 && playerY > exitY - 20) {
+    ctx.fillStyle = "black";
+    ctx.font = "30px Arial";
+    ctx.fillText("You Win!", 300, 250);
+  }
+}
+
+function drawBackground() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function draw() {
+  drawBackground();
+  movePlayer();
+  moveObstacles();
+  drawPlayer();
+  drawObstacles();
+  drawMouseShape();
+  drawExit();
+  drawWinMessage();
+}
+
+setInterval(draw, 30);
+</script>
+
+</body>
+</html>
